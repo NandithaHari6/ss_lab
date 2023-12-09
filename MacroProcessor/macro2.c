@@ -54,7 +54,7 @@ else
         fprintf(f5,".\t%s\t%s\n",mne1,opnd);
         fscanf(f3,"%s%s",mne1,opnd1);
         while(strcmp(mne1,"MEND")!=0){
-                                if((opnd[0]=='?'))
+                                if(opnd1[0]=='?')
                                         {
                                         fscanf(f4,"%s",arg);
                                         fprintf(f5,"-\t%s\t%s\n",mne1,arg);
