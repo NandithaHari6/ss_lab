@@ -31,13 +31,13 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
     fp4 = fopen("intermediate.txt", "w");
     fp5 = fopen("length.txt", "w");
 
-    fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);              // read first line
+    fscanf(fp1, "%s\t%s\t%x", label, opcode, &locctr);              // read first line
 
     if (strcmp(opcode, "START") == 0) {                       
         // atoi() requires stdlib.h header file , it converts ASCII to integer
-        start = atoi(operand);                                      // convert operand value from string to integer and assign to start
-        locctr = start;
-        fprintf(fp4, "\t%s\t%s\t%s\n", label, opcode, operand);     // write to output file (additional tab space as start will not have any locctr)
+        start=locctr;                                      // convert operand value from string to integer and assign to start
+        
+        fprintf(fp4, "\t%s\t%s\t%x\n", label, opcode,locctr);     // write to output file (additional tab space as start will not have any locctr)
         fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);          // read next line
     } 
     else {
@@ -48,11 +48,11 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
     while (strcmp(opcode, "END") != 0) {
 
         // 1. transfer address and read line to output file
-        fprintf(fp4, "%d\t%s\t%s\t%s\n", locctr, label, opcode, operand);
+        fprintf(fp4, "%x\t%s\t%s\t%s\n", locctr, label, opcode, operand);
 
         // 2. make symtab file with values not starting with **
         if (strcmp(label, "**") != 0) {
-            fprintf(fp3, "%s\t%d\n", label, locctr);
+            fprintf(fp3, "%s\t%x\n", label, locctr);
         }
 
         // 3. read from optab (code and mnemonic value)
@@ -91,7 +91,7 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
         fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);
     }
     // 6. transfer last line to file
-    fprintf(fp4, "%d\t%s\t%s\t%s\n", locctr, label, opcode, operand);
+    fprintf(fp4, "%x\t%s\t%s\t%s\n", locctr, label, opcode, operand);
 
     // 7. Close all files
     fclose(fp4);

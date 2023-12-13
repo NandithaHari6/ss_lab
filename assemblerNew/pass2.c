@@ -25,16 +25,16 @@ int main()
     {start=atoi(operand);
         fprintf(fp1, "\t%s\t%s\t%s\n", label, opcode, operand);
         fprintf(fp4, "H^%s^00%s^00%d\n", label, operand, length);
-        fscanf(fp3, "%d%s%s%s", &address, label, opcode, operand);
+        fscanf(fp3, "%x%s%s%s", &address, label, opcode, operand);
         
-        fprintf(fp4, "T^00%d^%d", address,length);
+        fprintf(fp4, "T^00%x^%d", address,length);
     }
 
     while (strcmp(opcode, "END") != 0)
     {
         if (strcmp(opcode, "BYTE") == 0)
         {
-            fprintf(fp1, "%d\t%s\t%s\t%s\t", address, label, opcode, operand);
+            fprintf(fp1, "%x\t%s\t%s\t%s\t", address, label, opcode, operand);
             len = strlen(operand);
             actual_len = len - 3;
             fprintf(fp4, "^");
@@ -51,12 +51,12 @@ int main()
         {
             
             int val=atoi(operand);
-            fprintf(fp1, "%d\t%s\t%s\t%s\t%06d\n", address, label, opcode, operand, val);
+            fprintf(fp1, "%x\t%s\t%s\t%s\t%06d\n", address, label, opcode, operand, val);
             fprintf(fp4, "^%06d", val);
         }
          else if ( (strcmp(opcode, "RESW") == 0)) {
             
-            fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
+            fprintf(fp1, "%x\t%s\t%s\t%s\n", address, label, opcode, operand);
            int val =atoi(operand);
              while(val!=0){
                 fprintf(fp4,"^******");
@@ -66,7 +66,7 @@ int main()
 
         else if ((strcmp(opcode, "RESB") == 0) ) {
             
-            fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
+            fprintf(fp1, "%x\t%s\t%s\t%s\n", address, label, opcode, operand);
            int val= atoi(operand);
 
              fprintf(fp4, "^");
@@ -82,22 +82,22 @@ int main()
             while (strcmp(opcode, mnemonic) != 0)
               fscanf(fp6,"%s%s",mnemonic,code);
             if (strcmp(operand, "COPY") == 0)
-                fprintf(fp1, "%d\t%s\t%s\t%s\t%s0000\n", address, label, opcode, operand, code);
+                fprintf(fp1, "%x\t%s\t%s\t%s\t%s0000\n", address, label, opcode, operand, code);
             else
             {
                 rewind(fp2);
-                fscanf(fp2, "%s%d", symbol, &add);
+                fscanf(fp2, "%s%x", symbol, &add);
                 while (strcmp(operand, symbol) != 0)
-                    fscanf(fp2, "%s%d", symbol, &add);
-                fprintf(fp1, "%d\t%s\t%s\t%s\t%s%d\n", address, label, opcode, operand, code, add);
-                fprintf(fp4, "^%s%d", code, add);
+                    fscanf(fp2, "%s%x", symbol, &add);
+                fprintf(fp1, "%x\t%s\t%s\t%s\t%s%x\n", address, label, opcode, operand, code, add);
+                fprintf(fp4, "^%s%x", code, add);
             }
         }
 
-        fscanf(fp3, "%d%s%s%s", &address, label, opcode, operand);
+        fscanf(fp3, "%x%s%s%s", &address, label, opcode, operand);
     }
 
-    fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
+    fprintf(fp1, "%x\t%s\t%s\t%s\n", address, label, opcode, operand);
     fprintf(fp4, "\nE^00%d",start );
     fclose(fp6);
     fclose(fp5);
