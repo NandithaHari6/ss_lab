@@ -11,13 +11,13 @@ char arg[20],mne[20],opnd[20],la[20],name[20],mne1[20],opnd1[20],pos1[10],pos2[1
 f1=fopen("input.txt","r");
 f2=fopen("namtab.txt","w+");
 f3=fopen("deftab.txt","w+");
-f4=fopen("argtab.txt","w+");
+
 f5=fopen("op.txt","w+");
 fscanf(f1,"%s%s%s",la,mne,opnd);
 while(strcmp(mne,"END")!=0)
 {
             if(strcmp(mne,"MACRO")==0)
-            {
+            {   pos=1;
                     fprintf(f2,"%s\n",la);
                     fseek(f2,SEEK_SET,0);
                     fprintf(f3,"%s\t%s\n",la,opnd);
@@ -41,7 +41,7 @@ else
         fscanf(f2,"%s",name);
         if(strcmp(mne,name)==0)
         {
-        len=strlen(opnd);
+        len=strlen(opnd);f4=fopen("argtab.txt","w+");
         for(i=0;i<len;i++){
                             if(opnd[i]!=',')
                             fprintf(f4,"%c",opnd[i]);
@@ -62,7 +62,7 @@ else
                                 else
                                         fprintf(f5,"-\t%s\t%s\n",mne1,opnd1);
                 fscanf(f3,"%s%s",mne1,opnd1);
-        }
+        }fclose(f4);
         }
         else
                  fprintf(f5,"%s\t%s\t%s\n",la,mne,opnd);
@@ -73,7 +73,7 @@ fprintf(f5,"%s\t%s\t%s",la,mne,opnd);
 fclose(f1);
 fclose(f2);
 fclose(f3);
-fclose(f4);
+// fclose(f4);
 fclose(f5);
 printf("files to be viewed \n");
 printf("1. argtab.txt\n");

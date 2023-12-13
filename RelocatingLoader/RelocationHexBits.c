@@ -23,8 +23,8 @@ while(strcmp(input,"E")!=0)
 if(strcmp(input,"H")==0)
 {
 fscanf(fp1,"%s",pn);
-fscanf(fp1,"%x",add);
-fscanf(fp1,"%x",length);
+fscanf(fp1,"%x",&add);
+fscanf(fp1,"%x",&length);
 fscanf(fp1,"%s",input);
 }
 if(strcmp(input,"T")==0)

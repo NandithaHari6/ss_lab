@@ -4,8 +4,8 @@
 
 void main() {
   FILE * fp;
-  int i, addr1, l, j, staddr1;
-  char name[10], line[50], name1[10], addr[10], rec[10], ch, staddr[10];
+  int i, addr1, l, j, staddr1,staddr2;
+  char name[10], line[50], name1[10], addr[10], rec[10], ch, staddr[10],ad[10];
   printf("enter program name:");
   scanf("%s", name);
   fp = fopen("input.txt", "r");
@@ -23,11 +23,13 @@ void main() {
         
        
         staddr[j] = '\0';
-        staddr1 = atoi(staddr);
+       sscanf(staddr,"%x", &staddr1);
+        // staddr1= atoi(staddr);
+        
         i = 12;
         while (line[i] != '\0') {
           if (line[i] != '^') {
-            printf("%06d \t %c%c\n",
+            printf("%06X \t %c%c\n",
               staddr1, line[i], line[i + 1]);
             staddr1++;
             i = i + 2;
