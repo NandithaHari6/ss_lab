@@ -23,11 +23,12 @@ void main() {
         
        
         staddr[j] = '\0';
-        staddr1 = atoi(staddr);
+        sscanf(staddr, "%x", &staddr1);
+        // staddr1 = atoi(staddr);
         i = 12;
         while (line[i] != '\0') {
           if (line[i] != '^') {
-            printf("%06d \t %c%c\n",
+            printf("%06X \t %c%c\n",
               staddr1, line[i], line[i + 1]);
             staddr1++;
             i = i + 2;
