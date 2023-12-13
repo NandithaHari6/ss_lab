@@ -3,31 +3,31 @@
 #include <string.h>
 
 void display();
+
+
 int main()
 {
-    char a[10], ad[10], label[10], opcode[10], operand[10], symbol[10],mnemonic[10],code[10];
-    int start, diff, i, address, add, len, actual_len, finaddr, prevaddr, j = 0, length;
-    FILE *fp1, *fp2, *fp3, *fp4, *fp5,*fp6;
+    char a[10], ad[10], label[10], opcode[10], operand[10], symbol[10];
+    int start, diff, i, address, add, len, actual_len, finaddr, prevaddr, j = 0,length;
+    char mnemonic[10],code[10];
+    
+
+    FILE *fp1, *fp2, *fp3, *fp4, *fp5, *fp6;
     fp1 = fopen("output.txt", "w");
     fp2 = fopen("symtab.txt", "r");
     fp3 = fopen("intermediate.txt", "r");
     fp4 = fopen("objcode.txt", "w");
-   fp5=fopen("length.txt", "r");
-   fp6=fopen("optab.txt", "r");
-   fscanf(fp5,"%d",&length);
+    fp5=fopen("length.txt","r");
+    fp6=fopen("optab.txt","r");
     fscanf(fp3, "%s\t%s\t%s", label, opcode, operand);
-
-     fclose(fp3);
-  fp3 = fopen("intermediate.txt", "r");
-  fscanf(fp3, "\t%s\t%s\t%s", label, opcode, operand);
+     fscanf(fp5,"%d",&length);
     if (strcmp(opcode, "START") == 0)
-    {
+    {start=atoi(operand);
         fprintf(fp1, "\t%s\t%s\t%s\n", label, opcode, operand);
-        int val=atoi(operand);
-        fprintf(fp4, "H^%6s^%06d^%d\n", label, val, length);
+        fprintf(fp4, "H^%s^00%s^00%d\n", label, operand, length);
         fscanf(fp3, "%d%s%s%s", &address, label, opcode, operand);
         
-        fprintf(fp4, "T^%06d^%d", val, length);
+        fprintf(fp4, "T^00%d^%d", address,length);
     }
 
     while (strcmp(opcode, "END") != 0)
@@ -44,15 +44,17 @@ int main()
                 fprintf(fp1, "%s", ad);
                 fprintf(fp4, "%s", ad);
             }
+            fprintf(fp1, "\n");
         }
- else if (strcmp(opcode, "WORD") == 0)
+
+        else if (strcmp(opcode, "WORD") == 0)
         {
-            len = strlen(operand);
-            itoa(atoi(operand), a, 10);
-            fprintf(fp1, "%d\t%s\t%s\t%s\t00000%s\n", address, label, opcode, operand, a);
+            
             int val=atoi(operand);
+            fprintf(fp1, "%d\t%s\t%s\t%s\t%06d\n", address, label, opcode, operand, val);
             fprintf(fp4, "^%06d", val);
-        }else if ( (strcmp(opcode, "RESW") == 0)) {
+        }
+         else if ( (strcmp(opcode, "RESW") == 0)) {
             
             fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
            int val =atoi(operand);
@@ -71,13 +73,17 @@ int main()
              while(val!=0){
                 fprintf(fp4,"**");
             val--;
-             }
-        }
-else{
-    fscanf(fp6,"%s,%s",mnemonic,code);
-            while (strcmp(opcode, mnemonic) != 0){
-                    fscanf(fp6,"%s%s",mnemonic,code);
-            }
+             }}
+        // else if ((strcmp(opcode, "RESB") == 0) || (strcmp(opcode, "RESW") == 0)) {
+        //     fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
+        // }
+        else
+        {fscanf(fp6,"%s%s",mnemonic,code);
+            while (strcmp(opcode, mnemonic) != 0)
+              fscanf(fp6,"%s%s",mnemonic,code);
+            if (strcmp(operand, "COPY") == 0)
+                fprintf(fp1, "%d\t%s\t%s\t%s\t%s0000\n", address, label, opcode, operand, code);
+            else
             {
                 rewind(fp2);
                 fscanf(fp2, "%s%d", symbol, &add);
@@ -87,25 +93,31 @@ else{
                 fprintf(fp4, "^%s%d", code, add);
             }
         }
-         fscanf(fp3, "%d%s%s%s", &address, label, opcode, operand);
+
+        fscanf(fp3, "%d%s%s%s", &address, label, opcode, operand);
     }
 
     fprintf(fp1, "%d\t%s\t%s\t%s\n", address, label, opcode, operand);
-    fprintf(fp4, "\nE^00%d", start);
+    fprintf(fp4, "\nE^00%d",start );
+    fclose(fp6);
+    fclose(fp5);
     fclose(fp4);
     fclose(fp3);
     fclose(fp2);
     fclose(fp1);
-    fclose(fp5);
+
     display();
+
     return 0;
 }
 
 void display() {
     char ch;
     FILE *fp1, *fp2, *fp3, *fp4;
-     printf("\nIntermediate file is converted into object code");
-     printf("\n\nThe contents of Intermediate file:\n\n");
+
+    printf("\nIntermediate file is converted into object code");
+
+    printf("\n\nThe contents of Intermediate file:\n\n");
     fp3 = fopen("intermediate.txt", "r");
     ch = fgetc(fp3);
     while (ch != EOF)

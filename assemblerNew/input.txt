@@ -1,4 +1,4 @@
-**	START	1020
+COPY	START	2000
 **	LDA	FIVE
 **	STA	ALPHA
 ** 	LDCH 	CHARZ
@@ -8,3 +8,7 @@ FIVE 	WORD 	5
 CHARZ 	BYTE 	C'Z'
 C1 	RESB 	1
 ** 	END	**
+
+
+
+
