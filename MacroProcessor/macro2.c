@@ -26,7 +26,7 @@ while(strcmp(mne,"END")!=0)
                     {
                             if(opnd[0]=='&')
                             {
-                                    itoa(pos,pos1,10);
+                                    sprintf(pos1,"%d",pos);
                                     strcpy(pos2,"?");
                                     strcpy(opnd,strcat(pos2,pos1));
                                     pos=pos+1;
