@@ -17,7 +17,8 @@ void main() {
  printf("\n The Page Replacement Process is -- \n");
  for(i=0;i<n;i++) 
  { 
-     if(i<f){pf++;
+     if(i<f){
+        pf++;
          m[i]=rs[i];
           printf("\t\t");
               for(j=0;j<f;j++)
@@ -57,6 +58,7 @@ void main() {
          for(j=0;j<f;j++)
          printf("\t%d",m[j]); 
           }
+          
            printf("\n"); 
           } }
          printf("\n The number of Page Faults using FIFO are %d",pf); }

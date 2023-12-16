@@ -6,8 +6,8 @@ void convert(char h[12]);
 char bitmask[12];
 char bit[12]={0};
 void main()
-{char add[6],length[10],input[10],binary[12],relocbit,ch,pn[5];
-int start,inp,len,i,address,opcode,addr,actualadd,tlen;
+{char input[10],binary[12],relocbit,ch,pn[5];
+int start,inp,len,i,address,opcode,addr,actualadd,tlen,add,length;
 FILE *fp1,*fp2;
 
 printf("\n\n Enter the actual starting address : ");
@@ -23,8 +23,8 @@ while(strcmp(input,"E")!=0)
 if(strcmp(input,"H")==0)
 {
 fscanf(fp1,"%s",pn);
-fscanf(fp1,"%x",add);
-fscanf(fp1,"%x",length);
+fscanf(fp1,"%x",&add);
+fscanf(fp1,"%x",&length);
 fscanf(fp1,"%s",input);
 }
 if(strcmp(input,"T")==0)

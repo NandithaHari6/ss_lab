@@ -1,17 +1,14 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define MAX_NAME_LENGTH 50
 
-// Define a structure for representing a file
 struct File {
     char name[MAX_NAME_LENGTH];
     int size;
 };
 
-// Define a structure for representing a directory
 struct Directory {
     char name[MAX_NAME_LENGTH];
     struct File* files;
@@ -20,7 +17,6 @@ struct Directory {
     int subDirectoryCount;
 };
 
-// Function to create a file
 struct File createFile(const char* name, int size) {
     struct File newFile;
     strcpy(newFile.name, name);
@@ -28,7 +24,6 @@ struct File createFile(const char* name, int size) {
     return newFile;
 }
 
-// Function to create a directory
 struct Directory createDirectory(const char* name) {
     struct Directory newDirectory;
     strcpy(newDirectory.name, name);
@@ -39,21 +34,18 @@ struct Directory createDirectory(const char* name) {
     return newDirectory;
 }
 
-// Function to add a file to a directory
 void addFileToDirectory(struct File file, struct Directory* directory) {
     directory->fileCount++;
     directory->files = (struct File*)realloc(directory->files, directory->fileCount * sizeof(struct File));
     directory->files[directory->fileCount - 1] = file;
 }
 
-// Function to create a subdirectory in a directory
 void addSubDirectory(struct Directory subDirectory, struct Directory* parentDirectory) {
     parentDirectory->subDirectoryCount++;
     parentDirectory->subDirectories = (struct Directory*)realloc(parentDirectory->subDirectories, parentDirectory->subDirectoryCount * sizeof(struct Directory));
     parentDirectory->subDirectories[parentDirectory->subDirectoryCount - 1] = subDirectory;
 }
 
-// Function to list the contents of a directory
 void listDirectoryContents(struct Directory directory) {
     printf("Contents of Directory '%s':\n", directory.name);
     for (int i = 0; i < directory.fileCount; i++) {
@@ -64,11 +56,9 @@ void listDirectoryContents(struct Directory directory) {
     }
 }
 
-// Function to delete a file from a directory
 void deleteFileFromDirectory(const char* fileName, struct Directory* directory) {
     for (int i = 0; i < directory->fileCount; i++) {
         if (strcmp(directory->files[i].name, fileName) == 0) {
-            // Found the file, remove it
             for (int j = i; j < directory->fileCount - 1; j++) {
                 directory->files[j] = directory->files[j + 1];
             }
@@ -81,11 +71,9 @@ void deleteFileFromDirectory(const char* fileName, struct Directory* directory) 
     printf("File '%s' not found in directory '%s'\n", fileName, directory->name);
 }
 
-// Function to delete a subdirectory from a directory
 void deleteSubDirectory(const char* subDirName, struct Directory* parentDirectory) {
     for (int i = 0; i < parentDirectory->subDirectoryCount; i++) {
         if (strcmp(parentDirectory->subDirectories[i].name, subDirName) == 0) {
-            // Found the subdirectory, remove it
             for (int j = i; j < parentDirectory->subDirectoryCount - 1; j++) {
                 parentDirectory->subDirectories[j] = parentDirectory->subDirectories[j + 1];
             }
@@ -98,31 +86,74 @@ void deleteSubDirectory(const char* subDirName, struct Directory* parentDirector
     printf("Subdirectory '%s' not found in directory '%s'\n", subDirName, parentDirectory->name);
 }
 
-void main() {
+void freeDirectory(struct Directory* directory) {
+    free(directory->files);
+    free(directory->subDirectories);
+}
 
+int main() {
     struct Directory root = createDirectory("Root");
+    int choice;
 
-    struct File file1 = createFile("file1.txt", 512);
-    struct File file2 = createFile("file2.txt", 512);
-    
-    addFileToDirectory(file1, &root);
-    addFileToDirectory(file2, &root);
+    do {
+        printf("\nMenu:\n");
+        printf("1. Create File\n");
+        printf("2. Create Subdirectory\n");
+        printf("3. List Directory Contents\n");
+        printf("4. Delete File\n");
+        printf("5. Delete Subdirectory\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    struct Directory subDir1 = createDirectory("Subdirectory1");
-    struct Directory subDir2 = createDirectory("Subdirectory2");
-    addSubDirectory(subDir1, &root);
-    addSubDirectory(subDir2, &root);
+        switch (choice) {
+            case 1: {
+                char fileName[MAX_NAME_LENGTH];
+                int fileSize;
+                printf("Enter file name: ");
+                scanf("%s", fileName);
+                printf("Enter file size: ");
+                scanf("%d", &fileSize);
+                struct File newFile = createFile(fileName, fileSize);
+                addFileToDirectory(newFile, &root);
+                break;
+            }
+            case 2: {
+                char subDirName[MAX_NAME_LENGTH];
+                printf("Enter subdirectory name: ");
+                scanf("%s", subDirName);
+                struct Directory newSubDir = createDirectory(subDirName);
+                addSubDirectory(newSubDir, &root);
+                break;
+            }
+            case 3:
+                listDirectoryContents(root);
+                break;
+            case 4: {
+                char fileName[MAX_NAME_LENGTH];
+                printf("Enter file name to delete: ");
+                scanf("%s", fileName);
+                deleteFileFromDirectory(fileName, &root);
+                break;
+            }
+            case 5: {
+                char subDirName[MAX_NAME_LENGTH];
+                printf("Enter subdirectory name to delete: ");
+                scanf("%s", subDirName);
+                deleteSubDirectory(subDirName, &root);
+                break;
+            }
+            case 0:
+                printf("Exiting program\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
 
-    listDirectoryContents(root);
+    } while (choice != 0);
 
-    // Delete a file and a subdirectory
-    deleteFileFromDirectory("file1.txt", &root);
-    deleteSubDirectory("Subdirectory1", &root);
+    // Free the allocated memory
+    freeDirectory(&root);
 
-    listDirectoryContents(root);
-
-    // Free the allocated memory free(root.files); free(root.subDirectories);
-
-   
-   
+    return 0;
 }

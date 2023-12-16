@@ -4,7 +4,7 @@
 
 void main() {
   FILE * fp;
-  int i, addr1, l, j, staddr1;
+  int i, addr1, l, j, staddr1,count;
   char name[10], line[50], name1[10], addr[10], rec[10], ch, staddr[10];
   printf("enter program name:");
   scanf("%s", name);
@@ -27,11 +27,15 @@ void main() {
         // staddr1 = atoi(staddr);
         i = 12;
         while (line[i] != '\0') {
+          
           if (line[i] != '^') {
-            printf("%06X \t %c%c\n",
-              staddr1, line[i], line[i + 1]);
+           
+            printf("%x \t %c%c\n",staddr1,
+               line[i], line[i + 1]);
             staddr1++;
             i = i + 2;
+           
+
           } else i++;
         }
       } else if (line[0] = 'E') {
